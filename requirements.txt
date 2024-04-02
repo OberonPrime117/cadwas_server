@@ -1,0 +1,29 @@
+beautifulsoup4==4.10.0
+Django==4.0
+django_rest_framework_mongoengine==3.4.1
+djangorestframework==3.12.4
+# fake_useragent==0.1.11
+# lxml==4.6.4
+mongoengine==0.27.0
+Pillow
+python-decouple==3.5
+requests==2.26.0
+stem==1.8.0
+# wordcloud==1.9.2
+django_cors_headers==4.0.0
+dnspython==2.3.0
+pymongo==4.4.1
+httpx==0.13.3
+httpcore==0.9.1
+pytz
+pysocks==1.7.1
+python_dotenv==1.0.0
+googletrans==3.0.0
+spacy==3.5.3
+nltk==3.8.1
+selenium
+gensim
+transformers
+pandas
+pyLDAvis
+corpora
