@@ -34,7 +34,7 @@ nltk.download('wordnet')
 # glove_model_path = config["GLOVE_PATH"]
 # glove_model = KeyedVectors.load(glove_model_path)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def hello(request):
     data = json.loads(request.body.decode('utf-8'))
     query = data['entered']
