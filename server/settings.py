@@ -94,9 +94,12 @@ DATABASES = {
 
 MONGODB_DATABASE = {
     'default': {
-        "name": config('DB_NAME'),
-        "host": config('DB_HOST'),
-        "tz_aware": config('DB_TZ_AWARE'),
+        # "name": config('DB_NAME'),
+        "name": "fresh_onions",
+        "host": "mongodb+srv://cadwa:LDmonQy1N1Lr6lIP@cadwas.xgtlkwz.mongodb.net",
+        # "host": config('DB_HOST'),
+        "tz_aware": True,
+        # "tz_aware": config('DB_TZ_AWARE'),
     }
 }
 

@@ -24,10 +24,21 @@ import gensim.downloader as api
 from gensim.models import KeyedVectors
 from django.http import HttpResponseForbidden
 from dotenv import dotenv_values
+import nltk
 
-config = dotenv_values(".env")
-glove_model_path = config["GLOVE_PATH"]
-glove_model = KeyedVectors.load(glove_model_path)
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# config = dotenv_values(".env")
+# glove_model_path = config["GLOVE_PATH"]
+# glove_model = KeyedVectors.load(glove_model_path)
+
+@api_view(['POST'])
+def hello(request):
+    data = json.loads(request.body.decode('utf-8'))
+    query = data['entered']
+    return Response(query)
 
 @api_view(['POST'])
 def search(request):
@@ -129,6 +140,7 @@ def results(request):
                         unit_list.append(k.link)
 
                 # ~ ADD URLs BASED ON DOMAIN ASSOCIATION WITH THE WORD
+                glove_model = api.load('glove-wiki-gigaword-300')
                 try:
                     html_code,dom,ml=vmain2([unit], glove_model)
                     values = OnionLink.objects.filter(domain=dom).only('link')
@@ -425,7 +437,7 @@ def link_info(request):
         plain_string_again = gzip.decompress(input_link_text.text).decode('utf-8')
         stop_separated = plain_string_again.split('.')
         stop_separated = stop_separated
-
+        glove_model = api.load('glove-wiki-gigaword-300')
         html_code,dom,ml = vmain2(stop_separated,glove_model)
 
         result_list["html_code"] = html_code

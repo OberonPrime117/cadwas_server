@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import bitcoin, flag, search, results, link_info
+from .views import bitcoin, flag, hello, search, results, link_info
 
 urlpatterns = [
     # path('get-all-crawled-links', get_all_crawled_links),
@@ -13,6 +13,7 @@ urlpatterns = [
     # path('flag-links', flag_links_to_track),
     # path('link-to-database', link_to_database),
     # path('bitcoin-address', bitcoin_address),
+    path('', hello),
     path('search', search),
     path('results',results),
     path('link_info',link_info),
