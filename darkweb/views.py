@@ -36,9 +36,9 @@ nltk.download('wordnet')
 
 @api_view(['GET'])
 def hello(request):
-    data = json.loads(request.body.decode('utf-8'))
-    query = data['entered']
-    return Response(query)
+    # data = json.loads(request.body.decode('utf-8'))
+    # query = data['entered']
+    return Response("heelo")
 
 @api_view(['POST'])
 def search(request):
