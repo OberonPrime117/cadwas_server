@@ -7,5 +7,3 @@ darkweb/migrations/__pycache__
 TorBrowser/
 darkweb/utils/glove-wiki-gigaword-300
 darkweb/utils/glove-wiki-gigaword-300.vectors.npy
-glove-wiki-gigaword-300
-glove-wiki-gigaword-300.vectors.npy
