@@ -28,9 +28,9 @@ SECRET_KEY = "django-insecure-$+em&$izbr=@6y*o+kcy#ofli+j*hprn8vbli7jv9*7%g!)2+z
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1','server-dev-nzch.2.sg-1.fl0.io']
+ALLOWED_HOSTS = ['127.0.0.1','cadwas-react.vercel.app','server-dev-nzch.2.sg-1.fl0.io']
 
 
 # Application definition
@@ -80,8 +80,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'server.wsgi.application'
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
