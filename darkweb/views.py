@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 import gzip
-from .utils.final2 import vmain2
+from .utils.final2 import caller_initial, vmain2
 from .utils.topic_modelling import preprocess_text, words
 from .models import Address, BaseContains, BaseDone, Category, ClearnetLink, ErrorDetected, Flaged, Keyword, LinkContains, LinkDone, LinkStatus, LinkVisited, OnionLink, Relation, Transaction, TransactionId, ipFound, mailFound, numberFound
 from django.core.paginator import Paginator
@@ -22,9 +22,9 @@ from django.http import HttpResponseForbidden
 from dotenv import dotenv_values
 import nltk
 
-# nltk.download('punkt')
-# nltk.download('stopwords')
-# nltk.download('wordnet')
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 # config = dotenv_values(".env")
 # glove_model_path = config["GLOVE_PATH"]
@@ -136,10 +136,10 @@ def results(request):
                         unit_list.append(k.link)
 
                 # ~ ADD URLs BASED ON DOMAIN ASSOCIATION WITH THE WORD
-                glove_model = api.load('glove-wiki-gigaword-300')
+                # glove_model = api.load('glove-wiki-gigaword-300')
                 try:
-                    html_code,dom,ml=vmain2([unit], glove_model)
-                    values = OnionLink.objects.filter(domain=dom).only('link')
+                    html_code,dom,ml=caller_initial([unit])
+                    values = OnionLink.objects.filter(domain=dom).only('link').limit(1000)
                     for k in values:
                         unit_list.append(k.link)
 
@@ -433,8 +433,8 @@ def link_info(request):
         plain_string_again = gzip.decompress(input_link_text.text).decode('utf-8')
         stop_separated = plain_string_again.split('.')
         stop_separated = stop_separated
-        glove_model = api.load('glove-wiki-gigaword-300')
-        html_code,dom,ml = vmain2(stop_separated,glove_model)
+
+        html_code,dom,ml = caller_initial(stop_separated)
 
         result_list["html_code"] = html_code
         result_list["dom"] = dom

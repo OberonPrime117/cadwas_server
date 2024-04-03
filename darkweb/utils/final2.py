@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import gensim
 import json
@@ -9,9 +10,11 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import re
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import json
 import numpy as np
+import sys
+import gensim.downloader as api
+from gensim.models import KeyedVectors
 
 def get_comments_list(file_path, sheet_name='Sheet1', column_name='Comments'):
     df = pd.read_excel(file_path)
@@ -113,26 +116,25 @@ def vmain2(lst,glove_model):
     # words_only_lists = [[word for word, _ in sublist] for sublist in ml]
     return html_code,dom,ml
 
-# def vmain2(lst, glove_model):
-#     user_comments = lst
-#     processed_comments = [preprocess_text(comment) for comment in user_comments]
-#     processed_comments = [comment for comment in processed_comments if len(comment) > 0]
-#     flattened_list_p_c = [item for sublist in processed_comments for item in sublist]
-#     dictionary = Dictionary(processed_comments)
-#     corpus = [dictionary.doc2bow(text) for text in processed_comments]
-#     num_topics = 10
-#     lda_model = LdaModel(corpus, num_topics=num_topics, id2word=dictionary, passes=10)
-#     vis_data = gensimvis.prepare(lda_model, corpus, dictionary)
+def caller_initial(input_list):
 
-#     # Serialize vis_data to JSON
-#     serialized_vis_data = json.dumps(vis_data, cls=gensimvis.JSONLDSerializableEncoder)
+    vectors = api.load('glove-wiki-gigaword-300')
+    vectors.save('glove-wiki-gigaword-300')
 
-#     # Convert the serialized vis_data to HTML using pyLDAvis
-#     html_code = pyLDAvis.prepared_data_to_html(serialized_vis_data)
-#     dom, ml = identify_highest_correlating_domain(flattened_list_p_c, glove_model)
-#     return html_code, dom, ml
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    filename = "glove-wiki-gigaword-300"
+    file_path = os.path.join(current_directory, filename)
+    if os.path.exists(file_path):
+        glove_model = KeyedVectors.load(file_path)
+    else:
+        vectors = api.load('glove-wiki-gigaword-300')
+        vectors.save('glove-wiki-gigaword-300')
+        glove_model = KeyedVectors.load(file_path)
+
+    html_code, domain, contributing_words = vmain2(input_list, glove_model)
 
 
+    return html_code, domain, contributing_words
 
 
 
