@@ -8,6 +8,12 @@ class Hold(Document):
     unitval = StringField(required=True, default="search")
     currentStat = StringField(required=True)
     time = DateTimeField(required=True)
+    secret_code = StringField(required=True)
+
+class WorkerMachine(Document):
+    machine_id = StringField(required=True)
+    ipaddress = StringField(required=True)
+    code = StringField(required=True)
 
 # -----------------------------
 # DETAILS EXTRACT - STATUS
@@ -37,6 +43,7 @@ class Category(Document):
 class Keyword(Document):
     link = StringField(required=True)
     keyword = StringField(required=True)
+    compkey = BinaryField(required=True)
 
 # -----------------------------
 # DATA EXTRACT
@@ -91,8 +98,8 @@ class OnionLink(Document):
     html = BinaryField(required=True)
     text = BinaryField(required=True)
     title = StringField(required=True)
-    domain = StringField(required=True, default="Other")
-    processed_text = BinaryField(required=True)
+    domain = StringField(required=False, default="Other")
+    # processed_text = BinaryField(required=True)
 
 # -----------------------------
 # DONE, VISITED, CONTAINS
@@ -112,8 +119,10 @@ class LinkDone(Document):
     link = StringField(required=True, unique=True)
     types = StringField(required=True) # donated, interval, important
     time = DateTimeField(required=True) # TIME ADDED TO CRAWL QUEUE (EITHER DNT OR IMP)
+    status = BooleanField(required=False, default=False)
     detail_done = BooleanField(required=True, default=False)
     data_done = BooleanField(required=True, default=False)
+    domain_done = BooleanField(required=True, default=False)
     bitcoin_done = BooleanField(required=True, default=False)
     keyword_done = BooleanField(required=True, default=False)
     link_done = BooleanField(required=True, default=False)
@@ -153,9 +162,9 @@ class LinkVisited(Document):
 class Address(Document):
     link = StringField(required=True)
     address = StringField(required = True)
-    current_balance = StringField(required = True)
-    sent = StringField(required=True)
-    received = StringField(required=True)
+    current_balance = IntField(required = True)
+    sent = IntField(required=True)
+    received = IntField(required=True)
 
 class TransactionId(Document):
     address = StringField(required=True)
@@ -166,9 +175,9 @@ class Transaction(Document):
     addr_amount = IntField(required=True)
     txid = StringField(required=True)
     status = StringField(required=True) # INPUT OUTPUT
-    referral_address = StringField(required=True)
+    # referral_address = StringField(required=True)
     link = StringField(required=True)
-    timestamp = DateTimeField(required=True)
+    # timestamp = DateTimeField(required=True)
 
 # -----------------------------
 # FORUM
@@ -264,8 +273,3 @@ class RedditCorrelation(Document):
     link = StringField(required=True)
     onion_username = StringField(required=True)
     correlation = ListField(StringField(required=True))
-
-class Flaged(Document):
-    link = StringField(required=True)
-    flag = StringField(required=True)
-    timestamp = DateTimeField(required=True)

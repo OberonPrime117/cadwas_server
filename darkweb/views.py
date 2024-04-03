@@ -1,12 +1,15 @@
+import os
 import time
 from urllib.parse import urlparse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 import gzip
+
+from darkweb.utils.join import join_files
 from .utils.final2 import caller_initial, vmain2
 from .utils.topic_modelling import preprocess_text, words
-from .models import Address, BaseContains, BaseDone, Category, ClearnetLink, ErrorDetected, Flaged, Keyword, LinkContains, LinkDone, LinkStatus, LinkVisited, OnionLink, Relation, Transaction, TransactionId, ipFound, mailFound, numberFound
+from .models import Address, BaseContains, BaseDone, Category, ClearnetLink, ErrorDetected, Keyword, LinkContains, LinkDone, LinkStatus, LinkVisited, OnionLink, Relation, Transaction, TransactionId, ipFound, mailFound, numberFound
 from django.core.paginator import Paginator
 import math
 from .utils.synonym_me import get_synonyms
@@ -77,7 +80,7 @@ def search(request):
             return Response({'res':True})            
 
 @api_view(['POST'])
-async def results(request):
+def results(request):
     if request.method == "POST":
 
         data = json.loads(request.body.decode('utf-8'))
@@ -129,21 +132,60 @@ async def results(request):
             else:
 
                 # ~ ADD SINGULAR URLs BASED ON KEYWORDS
-                val_count = Keyword.objects.filter(keyword=unit).only('link').count()
-                if val_count > 0:
-                    values = Keyword.objects.filter(keyword=unit).only('link')
-                    for k in values:
-                        unit_list.append(k.link)
+                # val_count = Keyword.objects.filter(keyword=unit).only('link').count()
+                # if val_count > 0:
+                #     values = Keyword.objects.filter(keyword=unit).only('link')
+                #     for k in values:
+                #         unit_list.append(k.link)
 
                 # ~ ADD URLs BASED ON DOMAIN ASSOCIATION WITH THE WORD
                 # glove_model = api.load('glove-wiki-gigaword-300')
                 try:
-                    html_code,dom,ml= await caller_initial([unit])
+                    current_directory = os.path.dirname(os.path.realpath(__file__))
+                    current_directory = current_directory.split("/")
+                    current_directory.pop()
+                except Exception as e:
+                    print("current directory issue")
+                
+                try:
+                    current_directory = os.path.join(*current_directory)
+                    filename = "glove-wiki-gigaword-300"
+                    file_path = os.path.join(current_directory, filename)
+                    file_path = "/"+file_path
+
+                    filename_check = "glove-wiki-gigaword-300.vectors.npy"
+                    file_path_check = os.path.join(current_directory, filename_check)
+                    file_path_check = "/"+file_path_check
+                except Exception as e:
+                    print("join errors")
+                
+                try:
+                    if os.path.exists(file_path_check):
+                        pass
+                    else:
+                        output_file = 'glove-wiki-gigaword-300.vectors.npy'
+                        join_files("split_gigaword", output_file)
+                
+                except:
+                    print("join files error")
+                
+                try:
+                    file_path = str(file_path)
+                    unit = str(unit)
+                    glove_model = KeyedVectors.load(file_path)
+                    print(glove_model)
+                    html_code,dom,ml= vmain2([unit], glove_model)
+                except Exception as e:
+                    print("glove model error")
+                    print(e)
+                
+                try:
                     values = OnionLink.objects.filter(domain=dom).only('link').limit(1000)
                     for k in values:
                         unit_list.append(k.link)
 
                 except Exception as e:
+                    print(e)
                     my_model = ErrorDetected(link=unit, error=e, filename="views.py results API - GLOVE domain failure")
                     my_model.save()
         
@@ -164,7 +206,7 @@ async def results(request):
 
                 dash_list = {}
 
-                stat_val = LinkStatus.objects.get(link=i)
+                stat_val = LinkDone.objects.get(link=i)
                 dash_list["status"] = stat_val.status
 
                 time_val = LinkDone.objects.get(link=i)
@@ -181,7 +223,7 @@ async def results(request):
                 temp.append(dash_list)
             
             except Exception as e:
-
+                print(e)
                 my_model = ErrorDetected(link=i, error=e, filename="views.py results API - POPULATE URL LIST WITH DATA POINTS")
                 my_model.save()
 
@@ -192,7 +234,7 @@ async def results(request):
         return Response({'res':page.object_list,'current_page_num':requested_num,'total_page_num':p.num_pages})
 
 @api_view(['POST'])
-async def link_info(request):
+def link_info(request):
     if request.method == "POST":
 
         data = json.loads(request.body.decode('utf-8'))
@@ -434,7 +476,44 @@ async def link_info(request):
         stop_separated = plain_string_again.split('.')
         stop_separated = stop_separated
 
-        html_code,dom,ml = await caller_initial(stop_separated)
+        try:
+            current_directory = os.path.dirname(os.path.realpath(__file__))
+            current_directory = current_directory.split("/")
+            current_directory.pop()
+        except Exception as e:
+            print("current directory issue")
+        
+        try:
+            current_directory = os.path.join(*current_directory)
+            filename = "glove-wiki-gigaword-300"
+            file_path = os.path.join(current_directory, filename)
+            file_path = "/"+file_path
+
+            filename_check = "glove-wiki-gigaword-300.vectors.npy"
+            file_path_check = os.path.join(current_directory, filename_check)
+            file_path_check = "/"+file_path_check
+        except Exception as e:
+            print("join errors")
+        
+        try:
+            if os.path.exists(file_path_check):
+                pass
+            else:
+                output_file = 'glove-wiki-gigaword-300.vectors.npy'
+                join_files("split_gigaword", output_file)
+        
+        except:
+            print("join files error")
+        
+        try:
+            file_path = str(file_path)
+            unit = str(unit)
+            glove_model = KeyedVectors.load(file_path)
+            print(glove_model)
+            html_code,dom,ml= vmain2([unit], glove_model)
+        except Exception as e:
+            print("glove model error")
+            print(e)
 
         result_list["html_code"] = html_code
         result_list["dom"] = dom
@@ -586,5 +665,5 @@ def flag(request):
         bits = str(data["link"])
         check = str(data["checked"])
         timeme = str(data["timestamp"])
-        my_model = Flaged(link=bits,flag=check,timestamp=timeme)
-        my_model.save()
+        # my_model = Flaged(link=bits,flag=check,timestamp=timeme)
+        # my_model.save()
