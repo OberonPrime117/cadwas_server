@@ -79,7 +79,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server.wsgi.application'
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    'https://cadwas-react.vercel.app'
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
