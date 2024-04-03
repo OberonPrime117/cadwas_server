@@ -29,3 +29,4 @@ pandas
 pyLDAvis
 corpora
 gunicorn
+scipy==1.12.0
