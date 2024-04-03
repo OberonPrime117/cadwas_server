@@ -1,14 +1,10 @@
-import datetime
 import time
-from urllib.parse import urljoin, urlparse
-from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
-import os
 import gzip
-from PIL import Image
-from .utils.final2 import get_comments_list, vmain2
+from .utils.final2 import vmain2
 from .utils.topic_modelling import preprocess_text, words
 from .models import Address, BaseContains, BaseDone, Category, ClearnetLink, ErrorDetected, Flaged, Keyword, LinkContains, LinkDone, LinkStatus, LinkVisited, OnionLink, Relation, Transaction, TransactionId, ipFound, mailFound, numberFound
 from django.core.paginator import Paginator
@@ -26,9 +22,9 @@ from django.http import HttpResponseForbidden
 from dotenv import dotenv_values
 import nltk
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('wordnet')
 
 # config = dotenv_values(".env")
 # glove_model_path = config["GLOVE_PATH"]
