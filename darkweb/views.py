@@ -180,7 +180,7 @@ def results(request):
                     print(e)
                 
                 try:
-                    values = OnionLink.objects.filter(domain=dom).only('link').limit(1000)
+                    values = OnionLink.objects.filter(domain=dom).only('link').limit(20)
                     for k in values:
                         unit_list.append(k.link)
 
