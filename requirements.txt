@@ -27,3 +27,4 @@ transformers
 pandas
 pyLDAvis
 corpora
+gunicorn
