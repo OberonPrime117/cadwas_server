@@ -21,6 +21,7 @@ python_dotenv==1.0.0
 googletrans==3.0.0
 spacy==3.5.3
 nltk==3.8.1
+uvicorn
 selenium
 gensim
 transformers
