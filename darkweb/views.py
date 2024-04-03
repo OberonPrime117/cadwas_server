@@ -7,7 +7,7 @@ import json
 import gzip
 
 from darkweb.utils.join import join_files
-from .utils.final2 import caller_initial, vmain2
+from .utils.final2 import vmain2
 from .utils.topic_modelling import preprocess_text, words
 from .models import Address, BaseContains, BaseDone, Category, ClearnetLink, ErrorDetected, Keyword, LinkContains, LinkDone, LinkStatus, LinkVisited, OnionLink, Relation, Transaction, TransactionId, ipFound, mailFound, numberFound
 from django.core.paginator import Paginator
