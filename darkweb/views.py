@@ -77,7 +77,7 @@ def search(request):
             return Response({'res':True})            
 
 @api_view(['POST'])
-def results(request):
+async def results(request):
     if request.method == "POST":
 
         data = json.loads(request.body.decode('utf-8'))
@@ -138,7 +138,7 @@ def results(request):
                 # ~ ADD URLs BASED ON DOMAIN ASSOCIATION WITH THE WORD
                 # glove_model = api.load('glove-wiki-gigaword-300')
                 try:
-                    html_code,dom,ml=caller_initial([unit])
+                    html_code,dom,ml= await caller_initial([unit])
                     values = OnionLink.objects.filter(domain=dom).only('link').limit(1000)
                     for k in values:
                         unit_list.append(k.link)
@@ -192,7 +192,7 @@ def results(request):
         return Response({'res':page.object_list,'current_page_num':requested_num,'total_page_num':p.num_pages})
 
 @api_view(['POST'])
-def link_info(request):
+async def link_info(request):
     if request.method == "POST":
 
         data = json.loads(request.body.decode('utf-8'))
@@ -434,7 +434,7 @@ def link_info(request):
         stop_separated = plain_string_again.split('.')
         stop_separated = stop_separated
 
-        html_code,dom,ml = caller_initial(stop_separated)
+        html_code,dom,ml = await caller_initial(stop_separated)
 
         result_list["html_code"] = html_code
         result_list["dom"] = dom

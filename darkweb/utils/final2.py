@@ -118,17 +118,17 @@ def vmain2(lst,glove_model):
 
 def caller_initial(input_list):
 
-    vectors = api.load('glove-wiki-gigaword-300')
-    vectors.save('glove-wiki-gigaword-300')
+    vectors = api.load('glove-wiki-gigaword-100')
+    vectors.save('glove-wiki-gigaword-100')
 
     current_directory = os.path.dirname(os.path.realpath(__file__))
-    filename = "glove-wiki-gigaword-300"
+    filename = "glove-wiki-gigaword-100"
     file_path = os.path.join(current_directory, filename)
     if os.path.exists(file_path):
         glove_model = KeyedVectors.load(file_path)
     else:
-        vectors = api.load('glove-wiki-gigaword-300')
-        vectors.save('glove-wiki-gigaword-300')
+        vectors = api.load('glove-wiki-gigaword-100')
+        vectors.save('glove-wiki-gigaword-100')
         glove_model = KeyedVectors.load(file_path)
 
     html_code, domain, contributing_words = vmain2(input_list, glove_model)
