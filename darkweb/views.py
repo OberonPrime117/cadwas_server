@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 import gzip
-
+import lzma
 from darkweb.utils.join import join_files
 from .utils.final2 import vmain2
 from .utils.topic_modelling import preprocess_text, words
@@ -472,7 +472,7 @@ def link_info(request):
         # ^ TOPIC MODELLING
         input_link_text = OnionLink.objects.get(link=input_link)
 
-        plain_string_again = gzip.decompress(input_link_text.text).decode('utf-8')
+        plain_string_again = lzma.decompress(input_link_text.text).decode('utf-8')
         stop_separated = plain_string_again.split('.')
         stop_separated = stop_separated
 
