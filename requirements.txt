@@ -18,11 +18,11 @@ httpcore==0.9.1
 pytz
 pysocks==1.7.1
 python_dotenv==1.0.0
-googletrans==3.0.0
+# googletrans==3.0.0
 spacy==3.5.3
 nltk==3.8.1
-uvicorn
-selenium
+# uvicorn
+# selenium
 gensim
 transformers
 pandas

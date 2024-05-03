@@ -17,7 +17,7 @@ from gensim.models import LdaModel
 from gensim.corpora import Dictionary
 import pyLDAvis.gensim_models as gensimvis
 import pyLDAvis
-from googletrans import Translator
+# from googletrans import Translator
 import gensim.corpora
 import gensim.downloader as api
 from gensim.models import KeyedVectors
