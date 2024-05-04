@@ -26,11 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-$+em&$izbr=@6y*o+kcy#ofli+j*hprn8vbli7jv9*7%g!)2+z"
 
+SECURE_SSL_REDIRECT = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+
+SECURE_SSL_REDIRECT = True  # Redirect HTTP requests to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # For reverse proxy setups
+SECURE_HSTS_SECONDS = 31536000  # One year HSTS expiration
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include subdomains in HSTS policy
+SECURE_HSTS_PRELOAD = True  # Enable HSTS preload list
+SESSION_COOKIE_SECURE = True  # Ensure secure session cookies
+CSRF_COOKIE_SECURE = True  # Ensure secure CSRF cookies
 
 # Application definition
 
@@ -81,7 +90,10 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
-    'https://cadwas-react.vercel.app'
+    'https://*.vercel.app',
+    'https://*.vercel.com',
+    'https://*.amazonaws.com',
+    'http://*.amazonaws.com'
 ]
 
 # Database
