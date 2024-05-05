@@ -25,9 +25,9 @@ from django.http import HttpResponseForbidden
 from dotenv import dotenv_values
 import nltk
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('wordnet')
 
 # config = dotenv_values(".env")
 # glove_model_path = config["GLOVE_PATH"]

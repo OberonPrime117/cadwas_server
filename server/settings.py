@@ -87,14 +87,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server.wsgi.application'
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOWED_ORIGINS = [
-    'https://*.vercel.app',
-    'https://*.vercel.com',
-    'https://*.amazonaws.com',
-    'http://*.amazonaws.com'
-]
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     'https://*.vercel.app',
+#     'https://*.vercel.com',
+#     'https://*.amazonaws.com',
+#     'http://*.amazonaws.com'
+# ]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
